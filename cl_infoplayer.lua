@@ -1,57 +1,22 @@
 for i, v in ipairs( player.GetAll() ) do
-    print("***************************************")
-
-	if v:Nick() == nil or v:Nick() == "" then
-	print("Nom: ???\n")
-	else
-    print("Nom Steam: " .. v:SteamName() .. "\n")
-	end
+	if not IsValid(v) and not v:IsPlayer() then continue end
+	print("***************************************")
+	print("Nom Steam: " .. v:SteamName() or "???" .. "\n")
+	print("[DARKRP]: Nom" .. v:GetName() or "???" .. "\n")
+	print("SteamID: " .. v:SteamID() or "???" .. "\n")
+	print("SteamID64: " .. v:SteamID64() or "???" .. "\n")
+	print("Team: " .. v:Team() or "???" .. "\n")
+	local max = 100 * v:Health() / v:GetMaxHealth() or ""
+	print("Vie: " .. v:Health() or "???" .. "/" .. v:GetMaxHealth() or "" .. " - " .. max .. "%\n")
+	print("Grade: " .. v:GetUserGroup() or "???" .. "\n")
+	print("[DARKRP] Money: " .. v:getDarkRPVar("money") or 0 .. "\n")
 	
-	if v:getDarkRPVar("money") != nil then
-    print("[DARKRP]: Nom" .. v:GetName() .. "\n")
-	end
-
-	if v:SteamID() == nil then
-    print("SteamID: ???\n")
-	else
-	print("SteamID: " .. v:SteamID() .. "\n")
-	end
-
-	if v:SteamID64() == nil then
-    print("SteamID64: ???\n")
-	else
-	print("SteamID64: " .. v:SteamID64() .. "\n")
-	end
-
-	if v:Team() == nil or v:Team() == "" then
-	print("Team: ???\n")
-	else
-    print("Team: " .. v:Team() .. "\n")
-	end
-
-	if v:Health() == nil or v:Health() == "" then
-	print("Vie: ???\n")
-	else
-	local max = 100 * v:Health() / v:GetMaxHealth()
-	print("Vie: " .. v:Health() .. "/" .. v:GetMaxHealth() .. " - " .. max .. "%\n")
-	end
-
-	if v:GetUserGroup() == nil or v:GetUserGroup() == "" then
-    print("Grade: ??? \n")
-	else
-    print("Grade: " .. v:GetUserGroup() .. "\n")
-	end
-
-	if v:getDarkRPVar("money") != nil then
-    print("[DARKRP] Money: " .. v:getDarkRPVar("money") .. "\n")
-	end
-
 end
 
-	print("********* [DEBUG] *********\n")
+print("********* [DEBUG] *********\n")
 
-	if LocalPlayer():getDarkRPVar("money") != nil then
+if DarkRP and LocalPlayer():getDarkRPVar("money") != nil then
 	print("DARKRP: TRUE")
-	else
+else
 	print("DARKRP: FALSE")
-	end
+end
