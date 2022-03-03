@@ -1,10 +1,6 @@
 hook.Remove("ULibUserGroupChange", "IFNET_WHITELISTUSERGROUP")
 hook.Remove("PlayerAuthed", "IFNET_WHITELISTUSERGROUP")
 
-local superadmin_customname = "" -- si vous avez changer le nom du groupe superadmin mettez le nom içi sinon laisser vide
-local admin_customname = "" -- si vous avez changer le nom du groupe admin mettez le nom içi sinon laisser vide
-local moderator_customname = "" -- si vous avez changer le nom du groupe moderator mettez le nom içi sinon laisser vide
-
 local superadmin_banreason = "Vous n'êtes pas whitelist pour le rang de Superadmin !."
 local admin_banreason = "Vous n'êtes pas whitelist pour le rang d'Admin !."
 local moderator_banreason = "Vous n'êtes pas whitelist pour le rang de Modérateur !."
@@ -30,33 +26,44 @@ local moderator_lookup = {
 
 }
 
-hook.Add("ULibUserGroupChange", "IFNET_WHITELISTUSERGROUP", function (id, allows, denies, new_group, old_group)
-    if new_group == (superadmin_customname or "superadmin") then
+hook.Add("ULibUserGroupChange", "IFNET_WHITELISTUSERGROUP", function (steamid, allows, denies, new_group, old_group)
+	local function BanPlayer(steamid, time, reason)
+		ULib.addBan(steamid, time, reason)
+		ULib.refreshBans()
+	end
+
+    if new_group == "superadmin" then
+        print("SUPERADMIN1")
 		if not superadmin_lookup[id] then
-			ULib.addBan(id, 0, superadmin_banreason)
+        	print("SUPERADMIN2")
+			BanPlayer(steamid, 0, superadmin_banreason)
 			return
 		end
-    elseif new_group == admin_customname or "admin" then
+    elseif new_group == "admin" then
+	print("ADMIN1")
 		if not admin_lookup[id] then
-			ULib.addBan(id, 0, admin_banreason)
+        	print("ADMIN2")
+			BanPlayer(steamid, 0, admin_banreason)
 			return
 		end
-    elseif new_group == moderator_customname or "moderator" then
+    elseif new_group == "moderator" then
+    print("MODO1")
 		if not moderator_lookup[id] then
-			ULib.addBan(id, 0, moderator_banreason)
+            print("MODO2")
+			BanPlayer(steamid, 0, moderator_banreason)
 			return
 		end
     end
 end)
 
 hook.Add("PlayerAuthed", "IFNET_WHITELISTUSERGROUP", function(ply, id) 
-    if not superadmin_lookup[id] and ply:IsUserGroup(superadmin_customname or "superadmin") then 
+    if not superadmin_lookup[id] and ply:IsUserGroup("superadmin") then 
         ULib.addBan(id, 0, superadmin_banreason)
         return
-    elseif not admin_lookup[id] and ply:IsUserGroup(admin_customname or "admin") then 
+    elseif not admin_lookup[id] and ply:IsUserGroup("admin") then 
         ULib.addBan(id, 0, admin_banreason)
         return
-    elseif not moderator_lookup[id] and ply:IsUserGroup(moderator_customname or "moderator") then 
+    elseif not moderator_lookup[id] and ply:IsUserGroup("moderator") then 
         ULib.addBan(id, 0, moderator_banreason)
         return
     end
